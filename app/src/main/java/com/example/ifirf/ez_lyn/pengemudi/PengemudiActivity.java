@@ -55,10 +55,10 @@ public class PengemudiActivity extends FragmentActivity implements OnMapReadyCal
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current_position));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         Bitmap your_icon = this.customMarker(R.drawable.you, 100, 100);
-        Marker you = mMap.addMarker(
+        your_marker = mMap.addMarker(
                 new MarkerOptions().position(current_position)
                         .icon(BitmapDescriptorFactory.fromBitmap(your_icon)));
-        you.setTitle("Bus ITS 1");
+        your_marker.setTitle("Bus ITS 1");
 
         Bitmap bus_stop_icon = this.customMarker(R.drawable.bus_stop, 80, 80);
         LatLng bus_stop_position = new LatLng(-7.279282, 112.797815);
