@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ifirf.ez_lyn.pengemudi.PengemudiActivity;
 import com.example.ifirf.ez_lyn.penumpang.PenumpangActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -62,6 +63,12 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Yeay! Anda berhasil login", Toast.LENGTH_LONG).show();
                     Intent penumpang_intent = new Intent(LoginActivity.this, PenumpangActivity.class);
                     startActivity(penumpang_intent);
+                    finish();
+                }
+                else if(email.equals("pengemudi") && password.equals("pengemudi")){
+                    Toast.makeText(LoginActivity.this, "Yeay! Anda berhasil login", Toast.LENGTH_LONG).show();
+                    Intent pengemudi_intent = new Intent(LoginActivity.this, PengemudiActivity.class);
+                    startActivity(pengemudi_intent);
                     finish();
                 }
                 else{

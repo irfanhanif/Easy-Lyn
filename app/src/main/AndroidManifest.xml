@@ -25,8 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -41,7 +42,13 @@
 
         <activity
             android:name=".penumpang.PenumpangActivity"
-            android:label="@string/title_activity_penumpang"></activity>
+            android:label="@string/title_activity_penumpang" />
+        <activity
+            android:name=".pengemudi.PengemudiActivity"
+            android:label="@string/title_activity_pengemudi" />
+        <activity
+            android:name=".Pengemudi.PengemudiActivity"
+            android:label="@string/title_activity_pengemudi" />
     </application>
 
 </manifest>

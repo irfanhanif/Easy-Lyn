@@ -12,86 +12,91 @@
     android:background="@color/cloud"
     android:orientation="vertical">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true">
-                <LinearLayout
-                    android:id="@+id/login_picture"
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true">
-                        <ImageView
-                            android:src="@drawable/bus"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:foregroundGravity="center_vertical"/>
+                    android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:id="@+id/login_picture"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_centerHorizontal="true">
+                                <ImageView
+                                    android:src="@drawable/bus"
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:foregroundGravity="center_vertical"/>
+
+                                <TextView
+                                    android:text="EASY-LYN"
+                                    android:textStyle="bold"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="@color/myBlue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textSize="32sp"
+                                    android:gravity="center_vertical"/>
+                        </LinearLayout>
 
                         <TextView
-                            android:text="EASY-LYN"
+                            android:id="@+id/wrong_login"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textAlignment="center"
+                            android:textColor="#F00"
+                            android:text="Username atau password yang Anda masukkan salah."
+                            android:visibility="invisible"
+                            android:layout_below="@+id/login_picture"/>
+
+                        <EditText
+                            android:id="@+id/email_et"
+                            android:hint="Email"
                             android:textStyle="bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:layout_below="@+id/wrong_login"
                             android:layout_marginLeft="10dp"
-                            android:textColor="@color/myBlue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:textSize="32sp"
-                            android:gravity="center_vertical"/>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/wrong_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textAlignment="center"
-                    android:textColor="#F00"
-                    android:text="Username atau password yang Anda masukkan salah."
-                    android:visibility="invisible"
-                    android:layout_below="@+id/login_picture"/>
-
-                <EditText
-                    android:id="@+id/email_et"
-                    android:hint="Email"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:layout_below="@+id/wrong_login"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingLeft="10dp"/>
-                <EditText
-                    android:id="@+id/password_et"
-                    android:hint="Password"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:layout_below="@+id/email_et"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingLeft="10dp"/>
-                <Button
-                    android:id="@+id/login_button"
-                    android:text="login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/myBlue"
-                    android:textColor="#FFF"
-                    android:layout_below="@id/password_et"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
-        </RelativeLayout>
-        <TextView
-            android:id="@+id/register_button"
-            android:text="BELUM PUNYA AKUN? DAFTAR DULU!"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#c0392b"
-            android:textStyle=""
-            android:textSize="14sp"
-            android:gravity="center_horizontal"
-            android:layout_alignParentBottom="true"/>
+                            android:layout_marginRight="10dp"
+                            android:paddingLeft="10dp"/>
+                        <EditText
+                            android:id="@+id/password_et"
+                            android:hint="Password"
+                            android:textStyle="bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:layout_below="@+id/email_et"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:paddingLeft="10dp"/>
+                        <Button
+                            android:id="@+id/login_button"
+                            android:text="login"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/myBlue"
+                            android:textColor="#FFF"
+                            android:layout_below="@id/password_et"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"/>
+                        <TextView
+                            android:id="@+id/register_button"
+                            android:text="BELUM PUNYA AKUN? DAFTAR DULU!"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#c0392b"
+                            android:textStyle=""
+                            android:textSize="14sp"
+                            android:gravity="center_horizontal"
+                            android:layout_marginTop="20dp"
+                            android:layout_below="@+id/login_button"/>
+                </RelativeLayout>
+        </ScrollView>
 
 </RelativeLayout>
