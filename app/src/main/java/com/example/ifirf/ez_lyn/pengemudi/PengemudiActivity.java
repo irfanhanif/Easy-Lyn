@@ -1,7 +1,10 @@
 package com.example.ifirf.ez_lyn.pengemudi;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -32,29 +36,20 @@ public class PengemudiActivity extends FragmentActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        getCurrentLocation = (ImageButton) findViewById(R.id.goto_current_btn);
-        getCurrentLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(current_position));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
-                your_marker.showInfoWindow();
-            }
-        });
-
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         // Add a marker in Sydney and move the camera
 
         current_position = new LatLng(-7.2802124, 112.7979468);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current_position));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
-        Bitmap your_icon = this.customMarker(R.drawable.you, 100, 100);
+        Bitmap your_icon = this.customMarker(R.drawable.you, 50, 50);
         your_marker = mMap.addMarker(
                 new MarkerOptions().position(current_position)
                         .icon(BitmapDescriptorFactory.fromBitmap(your_icon)));
@@ -65,7 +60,7 @@ public class PengemudiActivity extends FragmentActivity implements OnMapReadyCal
         Marker bus_stop = mMap.addMarker(
                 new MarkerOptions().position(bus_stop_position)
                         .icon(BitmapDescriptorFactory.fromBitmap(bus_stop_icon)));
-        bus_stop.setTitle("Bus Stop: Teknik Informatika ITS [4]");
+        bus_stop.setTitle("Bus Stop: Teknik Informatika ITS [4 penumpang]");
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
