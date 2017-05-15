@@ -48,14 +48,11 @@ public class PenumpangActivity extends FragmentActivity
         implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
-    private LatLng current_position;
-    private ImageButton getCurrentLocation;
-    private Marker your_marker;
-
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     private boolean followingCamera;
+    private boolean enteringApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +63,8 @@ public class PenumpangActivity extends FragmentActivity
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        enteringApp = true;
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -155,6 +154,11 @@ public class PenumpangActivity extends FragmentActivity
     private void updateUI() {
         if (mCurrentLocation != null) {
             LatLng current_location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            if(enteringApp){
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(current_location));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+                enteringApp = false;
+            }
         }
     }
 }
