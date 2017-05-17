@@ -36,8 +36,6 @@ public class PengemudiActivity extends FragmentActivity
         implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
-    private LatLng current_position;
-
     private boolean enteringApp;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
