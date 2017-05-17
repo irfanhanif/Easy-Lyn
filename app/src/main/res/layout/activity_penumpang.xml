@@ -12,5 +12,26 @@
         android:layout_height="match_parent"
         tools:context="com.example.ifirf.ez_lyn.penumpang.PenumpangActivity" />
 
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rute"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/halteNearby"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Halte Terdekat"
+            android:layout_weight="1"
+            android:backgroundTint="#2980b9"
+            android:textColor="#FFF"/>
+    </LinearLayout>
+
 </RelativeLayout>
 

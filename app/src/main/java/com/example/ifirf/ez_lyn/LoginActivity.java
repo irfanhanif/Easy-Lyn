@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -62,6 +63,10 @@ public class LoginActivity extends AppCompatActivity {
                 if(email.equals("penumpang") && password.equals("penumpang")){
                     Toast.makeText(LoginActivity.this, "Yeay! Anda berhasil login", Toast.LENGTH_LONG).show();
                     Intent penumpang_intent = new Intent(LoginActivity.this, PenumpangActivity.class);
+
+                    InputMethodManager imm = (InputMethodManager)getSystemService(LoginActivity.this.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
                     startActivity(penumpang_intent);
                     finish();
                 }

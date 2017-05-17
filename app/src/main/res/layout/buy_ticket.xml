@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pembelian Tiket"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="IDR 5000"
+        android:gravity="center_horizontal"
+        android:textSize="36sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#27ae60"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rute"
+        android:textStyle="bold"
+        android:textColor="#2980b9"
+        android:layout_gravity="center_horizontal"/>
+    <TextView
+        android:id="@+id/rute_pembelian"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Robotika - K1 Mart"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#2980b9"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:text="Tiket ini berlaku untuk enam jam ke depan dan hanya dapat digunakan untuk rute ini saja."/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BELI"
+        android:textColor="#FFF"
+        android:backgroundTint="#27ae60"/>
+
+</LinearLayout>
