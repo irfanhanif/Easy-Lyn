@@ -60,6 +60,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,7 +80,7 @@ public class PenumpangActivity extends FragmentActivity
     private LocationManager locationManager;
     private List<Marker> halteMarkers;
     private String TAG = "PenumpangActivity";
-    private Map<Marker, String> markerMap;
+    private Map<Marker, Map<String, String>> markerMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class PenumpangActivity extends FragmentActivity
         loading.displayLoading();
 
         halteMarkers = new ArrayList<>();
-        markerMap = new HashMap<Marker, String>();
+        markerMap = new HashMap<Marker, Map<String, String>>();
 
         locationManager = (LocationManager) PenumpangActivity.this.getSystemService(LOCATION_SERVICE);
         enteringApp = true;
@@ -222,8 +223,14 @@ public class PenumpangActivity extends FragmentActivity
                 bus_stop_icon = this.customMarker(R.drawable.halte, 60, 60);
                 halte.setIcon(BitmapDescriptorFactory.fromBitmap(bus_stop_icon));
 
+                Map<String, String> markerInfo = new HashMap<String, String>();
+                markerInfo.put("nama_halte", jsonObject.getString("nama_halte"));
+                markerInfo.put("nama_rute", jsonObject.getString("nama_rute"));
+                markerInfo.put("kode_halte", jsonObject.getString("kode_halte"));
+                markerInfo.put("kode_rute", jsonObject.getString("kode_rute"));
+
                 halteMarkers.add(halte);
-                markerMap.put(halte, jsonObject.getString("nama_rute"));
+                markerMap.put(halte, markerInfo);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -296,11 +303,15 @@ public class PenumpangActivity extends FragmentActivity
                 final AlertDialog.Builder builder = new AlertDialog.Builder(PenumpangActivity.this);
                 final LayoutInflater inflater = (LayoutInflater) PenumpangActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View dialogContent = inflater.inflate(R.layout.buy_ticket, null);
+                builder.setView(dialogContent);
 
                 TextView namaRute = (TextView) dialogContent.findViewById(R.id.rute_pembelian);
-                namaRute.setText(markerMap.get(marker));
+                TextView namaHalte = (TextView) dialogContent.findViewById(R.id.halte_pembelian);
 
-                builder.setView(dialogContent);
+                namaRute.setText(markerMap.get(marker).get("nama_rute"));
+                namaHalte.setText(markerMap.get(marker).get("nama_halte"));
+
+
 
                 builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
                     @Override
@@ -309,12 +320,51 @@ public class PenumpangActivity extends FragmentActivity
                     }
                 });
 
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
+
+                Button btnBeli = (Button) dialogContent.findViewById(R.id.btnBeli);
+                btnBeli.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final Loading loading = new Loading(PenumpangActivity.this);
+                        loading.displayLoading();
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.address+"belitiket",
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        if(response.equals("success")){
+                                            Toast.makeText(PenumpangActivity.this, "Pembelian berhasil.", Toast.LENGTH_LONG).show();
+                                        }
+                                        else{
+                                            Toast.makeText(PenumpangActivity.this, "Pembelian gagal. Coba lagi.", Toast.LENGTH_LONG).show();
+                                        }
+                                        loading.hideLoading();
+                                        dialog.dismiss();
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("Volley Error", error.toString());
+                                Toast.makeText(PenumpangActivity.this, "Pembelian gagal. Coba lagi.", Toast.LENGTH_LONG).show();
+                                loading.hideLoading();
+                                dialog.dismiss();
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("kode_halte", markerMap.get(marker).get("kode_halte"));
+                                params.put("kode_rute", markerMap.get(marker).get("kode_rute"));
+                                params.put("kode_pengguna", "1");
+                                return params;
+                            }
+                        };
+                        RequestQueue requestQueue = Volley.newRequestQueue(PenumpangActivity.this);
+                        requestQueue.add(stringRequest);
+                    }
+                });
+
                 dialog.show();
-                // Beli
-                // Loading
-                // Kirim data
-                // Loading selesai
             }
         });
     }
