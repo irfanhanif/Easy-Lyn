@@ -4,14 +4,24 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.ifirf.ez_lyn.R;
+import com.example.ifirf.ez_lyn.penumpang.PenumpangActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,11 +32,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class PengemudiActivity extends FragmentActivity implements OnMapReadyCallback {
+public class PengemudiActivity extends FragmentActivity
+        implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
     private GoogleMap mMap;
-    private LatLng current_position;
-    private ImageButton getCurrentLocation;
-    private Marker your_marker;
+    private boolean enteringApp;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private Location mCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,46 +50,88 @@ public class PengemudiActivity extends FragmentActivity implements OnMapReadyCal
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        enteringApp = true;
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-        // Add a marker in Sydney and move the camera
-
-        current_position = new LatLng(-7.2802124, 112.7979468);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(current_position));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
-        Bitmap your_icon = this.customMarker(R.drawable.you, 50, 50);
-        your_marker = mMap.addMarker(
-                new MarkerOptions().position(current_position)
-                        .icon(BitmapDescriptorFactory.fromBitmap(your_icon)));
-        your_marker.setTitle("Bus ITS 1");
-
-        Bitmap bus_stop_icon = this.customMarker(R.drawable.bus_stop, 80, 80);
-        LatLng bus_stop_position = new LatLng(-7.279282, 112.797815);
-        Marker bus_stop = mMap.addMarker(
-                new MarkerOptions().position(bus_stop_position)
-                        .icon(BitmapDescriptorFactory.fromBitmap(bus_stop_icon)));
-        bus_stop.setTitle("Bus Stop: Teknik Informatika ITS [4 penumpang]");
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if (marker.getTitle().toString().toLowerCase().contains("stop")) {
-                    Toast.makeText(PengemudiActivity.this, marker.getTitle().toString(), Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                else return false;
-            }
-        });
     }
 
     private Bitmap customMarker(int source, int height, int width){
         BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(source);
         Bitmap bitmap = bitmapDrawable.getBitmap();
         return Bitmap.createScaledBitmap(bitmap, height, width, false);
+    }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+        Log.d("mCurrentLocation", "Lat: " + String.valueOf(mCurrentLocation.getLatitude()) + ", Lng:" + String.valueOf(mCurrentLocation.getLongitude()));
+        Toast.makeText(PengemudiActivity.this,
+                "Lat: " + String.valueOf(mCurrentLocation.getLatitude()) + ", Lng:" + String.valueOf(mCurrentLocation.getLongitude()),
+                Toast.LENGTH_LONG).show();
+        updateUI();
+
+    }
+
+    private void updateUI() {
+        if (mCurrentLocation != null) {
+            LatLng current_location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            if(enteringApp){
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(current_location));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+                enteringApp = false;
+            }
+        }
     }
 }
