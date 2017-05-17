@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ifirf.ez_lyn.pengemudi.Menuu;
 import com.example.ifirf.ez_lyn.pengemudi.PengemudiActivity;
 import com.example.ifirf.ez_lyn.penumpang.PenumpangActivity;
 

@@ -311,8 +311,6 @@ public class PenumpangActivity extends FragmentActivity
                 namaRute.setText(markerMap.get(marker).get("nama_rute"));
                 namaHalte.setText(markerMap.get(marker).get("nama_halte"));
 
-
-
                 builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -320,51 +318,64 @@ public class PenumpangActivity extends FragmentActivity
                     }
                 });
 
-                final AlertDialog dialog = builder.create();
+                final AlertDialog dialogBuy = builder.create();
 
                 Button btnBeli = (Button) dialogContent.findViewById(R.id.btnBeli);
                 btnBeli.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final Loading loading = new Loading(PenumpangActivity.this);
-                        loading.displayLoading();
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.address+"belitiket",
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        if(response.equals("success")){
-                                            Toast.makeText(PenumpangActivity.this, "Pembelian berhasil.", Toast.LENGTH_LONG).show();
-                                        }
-                                        else{
-                                            Toast.makeText(PenumpangActivity.this, "Pembelian gagal. Coba lagi.", Toast.LENGTH_LONG).show();
-                                        }
-                                        loading.hideLoading();
-                                        dialog.dismiss();
-                                    }
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e("Volley Error", error.toString());
-                                Toast.makeText(PenumpangActivity.this, "Pembelian gagal. Coba lagi.", Toast.LENGTH_LONG).show();
-                                loading.hideLoading();
+                        final AlertDialog.Builder alertDialogConf = new AlertDialog.Builder(PenumpangActivity.this);
+                        alertDialogConf.setTitle("Konfirmasi Pembelian");
+                        alertDialogConf.setMessage("Apakah Anda yakin ingin membeli tiket?");
+                        alertDialogConf.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog,int which) {
                                 dialog.dismiss();
+                                final Loading loading = new Loading(PenumpangActivity.this);
+                                loading.displayLoading();
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.address+"belitiket",
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                if(response.equals("success")){
+                                                    Toast.makeText(PenumpangActivity.this, "Pembelian berhasil.", Toast.LENGTH_LONG).show();
+                                                }
+                                                else{
+                                                    Toast.makeText(PenumpangActivity.this, "Pembelian gagal. Coba lagi.", Toast.LENGTH_LONG).show();
+                                                }
+                                                loading.hideLoading();
+                                                dialogBuy.dismiss();
+                                            }
+                                        }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.e("Volley Error", error.toString());
+                                        Toast.makeText(PenumpangActivity.this, "Pembelian gagal. Coba lagi.", Toast.LENGTH_LONG).show();
+                                        loading.hideLoading();
+                                        dialogBuy.dismiss();
+                                    }
+                                }){
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("kode_halte", markerMap.get(marker).get("kode_halte"));
+                                        params.put("kode_rute", markerMap.get(marker).get("kode_rute"));
+                                        params.put("kode_pengguna", "1");
+                                        return params;
+                                    }
+                                };
+                                RequestQueue requestQueue = Volley.newRequestQueue(PenumpangActivity.this);
+                                requestQueue.add(stringRequest);
                             }
-                        }){
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("kode_halte", markerMap.get(marker).get("kode_halte"));
-                                params.put("kode_rute", markerMap.get(marker).get("kode_rute"));
-                                params.put("kode_pengguna", "1");
-                                return params;
+                        });
+                        alertDialogConf.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
                             }
-                        };
-                        RequestQueue requestQueue = Volley.newRequestQueue(PenumpangActivity.this);
-                        requestQueue.add(stringRequest);
+                        });
+                        alertDialogConf.show();
                     }
                 });
-
-                dialog.show();
+                dialogBuy.show();
             }
         });
     }
