@@ -5,5 +5,5 @@ package com.example.ifirf.ez_lyn;
  */
 
 public class Config {
-    public static String address = "http://10.151.12.197/easy-lyn/public/";
+    public static String address = "http://mobile.if.its.ac.id/easy-lyn/public/";
 }
